@@ -1,31 +1,38 @@
 # Project Context
 
 ## Purpose
-[Describe your project's purpose and goals]
+The FPF Governance MCP Server provides tools to manage and govern a First Principles Framework (FPF) knowledge base. It exposes MCP resources and tools to interact with the FPF specification and user data.
 
 ## Tech Stack
-- [List your primary technologies]
-- [e.g., TypeScript, React, Node.js]
+- **Language**: Kotlin 2.0+
+- **Build System**: Maven (Wrapper)
+- **Runtime**: Java 21 LTS
+- **Distribution**: GraalVM Native Image
 
 ## Project Conventions
 
 ### Code Style
-[Describe your code style preferences, formatting rules, and naming conventions]
+- Follow official Kotlin coding conventions.
+- Use `mvnw` for all build operations.
 
 ### Architecture Patterns
-[Document your architectural decisions and patterns]
+- **MCP Server**: Implements the Model Context Protocol.
+- **Hexagonal/Clean Architecture**: (Planned) Separate domain logic from adapters.
 
 ### Testing Strategy
-[Explain your testing approach and requirements]
+- **Unit Tests**: JUnit 5 + Kotlin Test.
+- **Integration Tests**: Verify MCP protocol compliance.
 
 ### Git Workflow
-[Describe your branching strategy and commit conventions]
+- Feature branches (e.g. `feature/xyz`).
+- OpenSpec workflow for significant changes.
 
 ## Domain Context
-[Add domain-specific knowledge that AI assistants need to understand]
+The First Principles Framework (FPF) is a rigorous self-management methodology. The server acts as a bridge between the raw markdown files of the FPF and AI agents.
 
 ## Important Constraints
-[List any technical, business, or regulatory constraints]
+- **Performance**: Must start quickly and have low memory footprint (Native Image).
+- **Correctness**: Must strictly adhere to the FPF specification.
 
 ## External Dependencies
-[Document key external services, APIs, or systems]
+- **GraalVM**: Required for native image builds.
