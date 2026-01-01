@@ -14,6 +14,8 @@ The FPF Governance MCP Server provides tools to manage and govern a First Princi
 ### Code Style
 - Follow official Kotlin coding conventions.
 - Use `mvnw` for all build operations.
+- **Build Command**: Always use `./mvnw -Pnative package` to generate the standalone executable.
+- **Run Command**: Execute the binary directly: `./target/fpf-governance-mcp`.
 
 ### Architecture Patterns
 - **MCP Server**: Implements the Model Context Protocol.
