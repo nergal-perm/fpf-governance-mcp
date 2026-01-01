@@ -1,8 +1,4 @@
-# mcp-protocol Specification
-
-## Purpose
-TBD - created by archiving change stub-mcp-initialize. Update Purpose after archive.
-## Requirements
+## MODIFIED Requirements
 ### Requirement: Initialize Handshake
 
 The server MUST parse the `initialize` JSON-RPC request using a type-safe model and respond with a valid structured result.
@@ -14,6 +10,7 @@ The server MUST parse the `initialize` JSON-RPC request using a type-safe model 
 -   **And** the server serializes a `JsonRpcResponse` with `result` containing server capabilities
 -   **And** the `id` of the response matches the request `id`
 
+## ADDED Requirements
 ### Requirement: JSON-RPC Error Handling
 
 The server MUST handle invalid JSON and invalid RPC requests according to the JSON-RPC 2.0 specification.
@@ -27,4 +24,3 @@ The server MUST handle invalid JSON and invalid RPC requests according to the JS
 -   **Given** the server is running
 -   **When** a valid JSON object is sent that is not a valid RPC request (e.g. missing `method`)
 -   **Then** the server responds with a JSON-RPC Invalid Request Error (code -32600)
-

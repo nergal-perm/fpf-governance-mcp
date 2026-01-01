@@ -28,6 +28,13 @@
             <version>${kotlin.version}</version>
         </dependency>
 
+        <!-- JSON Serialization -->
+        <dependency>
+            <groupId>org.jetbrains.kotlinx</groupId>
+            <artifactId>kotlinx-serialization-json</artifactId>
+            <version>1.7.3</version>
+        </dependency>
+
         <!-- Test Dependencies -->
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
@@ -82,6 +89,18 @@
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
                 <version>${kotlin.version}</version>
+                <configuration>
+                    <compilerPlugins>
+                        <plugin>kotlinx-serialization</plugin>
+                    </compilerPlugins>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.jetbrains.kotlin</groupId>
+                        <artifactId>kotlin-maven-serialization</artifactId>
+                        <version>${kotlin.version}</version>
+                    </dependency>
+                </dependencies>
                 <executions>
                     <execution>
                         <id>compile</id>
@@ -140,6 +159,9 @@
                         <configuration>
                             <mainClass>org.fpf.governance.MainKt</mainClass>
                             <imageName>fpf-governance-mcp</imageName>
+                            <buildArgs>
+                                <buildArg>--initialize-at-build-time=kotlin.DeprecationLevel</buildArg>
+                            </buildArgs>
                         </configuration>
                     </plugin>
                 </plugins>
