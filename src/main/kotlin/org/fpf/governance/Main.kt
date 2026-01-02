@@ -78,9 +78,130 @@ class EchoTool : McpTool {
     }
 }
 
+// 4. Check Rule Infrastructure
+data class ValidationResult(val valid: Boolean, val errors: List<String>)
+
+interface CheckRule {
+    fun validate(path: String, content: String): ValidationResult
+}
+
+// 5. Rule Implementation: RULE-001 Location
+class Rule001Location : CheckRule {
+    override fun validate(path: String, content: String): ValidationResult {
+        // Simple frontmatter parsing using Regex
+        val typeRegex = Regex("^type:\\s*(\\w+)", RegexOption.MULTILINE)
+        val match = typeRegex.find(content)
+        val type = match?.groupValues?.get(1)
+
+        if (type == null) {
+            // If no type is found, we assume it's not subject to this rule (or maybe a different
+            // error, but let's be lenient for stub)
+            return ValidationResult(true, emptyList())
+        }
+
+        val expectedDir =
+                when (type) {
+                    "dissatisfaction" -> "20_Registry/Problems"
+                    "hypothesis" -> "30_Laboratory/Hypotheses"
+                    "decision" -> "40_Governance/Decisions"
+                    "project" -> "50_Execution/Projects"
+                    else -> null // Unknown type, no location rule enforced by this specific rule
+                }
+
+        if (expectedDir != null) {
+            if (!path.contains(expectedDir)) {
+                return ValidationResult(
+                        false,
+                        listOf(
+                                "RULE-001: Artifact of type '$type' must be located in '$expectedDir'. Current path: '$path'"
+                        )
+                )
+            }
+        }
+        return ValidationResult(true, emptyList())
+    }
+}
+
+// 6. Check Registry
+object CheckRegistry {
+    private val rules = mutableListOf<CheckRule>()
+
+    init {
+        // Check "registry" logic: Initialize with hardcoded rule
+        register(Rule001Location())
+    }
+
+    fun register(rule: CheckRule) {
+        rules.add(rule)
+    }
+
+    fun validate(path: String, content: String): ValidationResult {
+        val allErrors = mutableListOf<String>()
+        for (rule in rules) {
+            val result = rule.validate(path, content)
+            if (!result.valid) {
+                allErrors.addAll(result.errors)
+            }
+        }
+        return ValidationResult(allErrors.isEmpty(), allErrors)
+    }
+}
+
+// 7. Check File Tool
+class CheckFileTool : McpTool {
+    override val name = "validate_governance_compliance"
+    override val description =
+            "FPF Governance Linter. REQUIRED: Call this tool to validate content and paths for any new or modified artifact (Hypothesis, Decision, etc.) BEFORE writing to disk to ensure compliance."
+    override val inputSchema = buildJsonObject {
+        put("type", "object")
+        putJsonObject("properties") {
+            putJsonObject("path") { put("type", "string") }
+            putJsonObject("content") { put("type", "string") }
+        }
+        put(
+                "required",
+                kotlinx.serialization.json.buildJsonArray {
+                    add(kotlinx.serialization.json.JsonPrimitive("path"))
+                    add(kotlinx.serialization.json.JsonPrimitive("content"))
+                }
+        )
+    }
+
+    override fun call(args: JsonObject): JsonElement {
+        val path =
+                (args["path"] as? kotlinx.serialization.json.JsonPrimitive)?.content
+                        ?: throw IllegalArgumentException("Missing path")
+        val content =
+                (args["content"] as? kotlinx.serialization.json.JsonPrimitive)?.content
+                        ?: throw IllegalArgumentException("Missing content")
+
+        val result = CheckRegistry.validate(path, content)
+
+        return buildJsonObject {
+            put(
+                    "content",
+                    kotlinx.serialization.json.buildJsonArray {
+                        add(
+                                buildJsonObject {
+                                    put("type", "text")
+                                    put(
+                                            "text",
+                                            if (result.valid) "Valid"
+                                            else "Invalid: ${result.errors.joinToString("; ")}"
+                                    )
+                                }
+                        )
+                    }
+            )
+            put("isError", !result.valid) // Optional hint if client supports it
+        }
+    }
+}
+
 fun main() {
     // Register tools
     ToolRegistry.register(EchoTool())
+    ToolRegistry.register(CheckFileTool())
 
     while (true) {
         val line = readlnOrNull() ?: break
