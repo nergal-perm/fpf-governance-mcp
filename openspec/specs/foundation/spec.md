@@ -1,7 +1,7 @@
 # foundation Specification
 
 ## Purpose
-The Foundation capability defines the core technological stack, build systems, and runtime environments required for the FPF Governance MCP server. It ensures a consistent, high-performance, and maintainable codebase across all development environments.
+The Foundation specification defines the core technological stack, build systems, and runtime environments required for the FPF Governance MCP server. It ensures a consistent, high-performance, and maintainable codebase across all development environments, mandating Kotlin, Maven, and GraalVM Native Image support.
 
 ## Requirements
 

@@ -5,11 +5,18 @@ import io.modelcontextprotocol.spec.McpSchema;
 import org.fpf.governance.checks.CheckRegistry;
 import org.fpf.governance.checks.ValidationResult;
 
+import org.fpf.governance.vault.VaultProvider;
+
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 
 public class ValidateArtifact implements ToolSpecification {
+    private final VaultProvider vault;
+
+    public ValidateArtifact(VaultProvider vault) {
+        this.vault = vault;
+    }
 
     @Override
     public BiFunction<McpSyncServerExchange, McpSchema.CallToolRequest, McpSchema.CallToolResult> handler() {
@@ -24,7 +31,7 @@ public class ValidateArtifact implements ToolSpecification {
                 throw new IllegalArgumentException("Missing content");
             }
 
-            ValidationResult result = CheckRegistry.validate(path, content);
+            ValidationResult result = CheckRegistry.validate(path, content, vault);
 
             String message = result.valid() ? "Valid" : "Invalid: " + String.join("; ", result.errors());
 
@@ -41,16 +48,14 @@ public class ValidateArtifact implements ToolSpecification {
                 .name("validate_governance_compliance")
                 .description(
                         "FPF Governance Linter. REQUIRED: Call this tool to validate content and paths for any new or modified artifact (Hypothesis, "
-                        + "Decision, etc.) BEFORE writing to disk to ensure compliance.")
+                                + "Decision, etc.) BEFORE writing to disk to ensure compliance.")
                 .inputSchema(new McpSchema.JsonSchema(
                         "object",
                         Map.of(
                                 "path", Map.of("type", "string"),
-                                "content", Map.of("type", "string")
-                        ),
+                                "content", Map.of("type", "string")),
                         List.of("path", "content"),
-                        null, null, null
-                ))
+                        null, null, null))
                 .build();
     }
 }

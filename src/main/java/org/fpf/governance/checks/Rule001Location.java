@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.fpf.governance.vault.VaultProvider;
+
 public class Rule001Location implements CheckRule {
     @Override
-    public ValidationResult validate(String path, String content) {
+    public ValidationResult validate(String path, String content, VaultProvider vault) {
         Pattern typeRegex = Pattern.compile("^type:\\s*(\\w+)", Pattern.MULTILINE);
         Matcher match = typeRegex.matcher(content);
 
@@ -31,8 +33,8 @@ public class Rule001Location implements CheckRule {
             if (!path.contains(expectedDir)) {
                 return new ValidationResult(
                         false,
-                        List.of("RULE-001: Artifact of type '" + type + "' must be located in '" + expectedDir + "'. Current path: '" + path + "'")
-                );
+                        List.of("RULE-001: Artifact of type '" + type + "' must be located in '" + expectedDir
+                                + "'. Current path: '" + path + "'"));
             }
         }
         return new ValidationResult(true, List.of());

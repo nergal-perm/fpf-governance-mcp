@@ -8,16 +8,20 @@ public class CheckRegistry {
 
     static {
         register(new Rule001Location());
+        register(new Rule002Naming());
+        register(new Rule1xxLinkage());
+        register(new Rule201Assurance());
+        register(new Rule202ActiveLimit());
     }
 
     public static void register(CheckRule rule) {
         rules.add(rule);
     }
 
-    public static ValidationResult validate(String path, String content) {
+    public static ValidationResult validate(String path, String content, org.fpf.governance.vault.VaultProvider vault) {
         List<String> allErrors = new ArrayList<>();
         for (CheckRule rule : rules) {
-            ValidationResult result = rule.validate(path, content);
+            ValidationResult result = rule.validate(path, content, vault);
             if (!result.valid()) {
                 allErrors.addAll(result.errors());
             }

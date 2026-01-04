@@ -1,7 +1,7 @@
 # mcp-protocol Specification
 
 ## Purpose
-TBD - created by archiving change stub-mcp-initialize. Update Purpose after archive.
+The MCP Protocol specification defines how the FPF Governance server implements the Model Context Protocol. It covers the server's capabilities, tool exposure mechanism, and protocol compliance (JSON-RPC 2.0) needed to interoperate with MCP clients (like Claude Desktop or IDE extensions).
 ## Requirements
 ### Requirement: Initialize Handshake
 
