@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "java-linter": {
+      "command": "java",
+      "args": [
+        "-jar",
+        "./target/fpf-governance-mcp-0.1.0-SNAPSHOT.jar"
+      ]
+    }
+  }
+}
