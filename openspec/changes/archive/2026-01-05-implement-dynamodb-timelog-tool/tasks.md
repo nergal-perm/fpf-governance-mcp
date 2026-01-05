@@ -1,0 +1,6 @@
+- [x] Add `software.amazon.awssdk:dynamodb` dependency to `pom.xml` <!-- id: 0 -->
+- [x] Create `TimelogService` to wrap DynamoDB logic (connect, fetch, delete) <!-- id: 1 -->
+- [x] Implement `FetchTimelogsTool` class implementing `ToolSpecification` <!-- id: 2 -->
+- [x] Implement `DeleteTimelogTool` class implementing `ToolSpecification` <!-- id: 3 -->
+- [x] Register new tools in `Main.java` <!-- id: 4 -->
+- [x] Verify with `mvn verify` (requires mocking DynamoDB or integration test) <!-- id: 5 -->

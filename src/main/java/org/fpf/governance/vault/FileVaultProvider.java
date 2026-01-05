@@ -54,7 +54,7 @@ public class FileVaultProvider implements VaultProvider {
 
         try (Stream<Path> stream = Files.walk(contextDir, 1)) {
             return stream
-                    .filter(p -> Files.isRegularFile(p))
+                    .filter(Files::isRegularFile)
                     .map(p -> p.getFileName().toString())
                     .filter(name -> name.matches(regexPattern))
                     .collect(Collectors.toList());
