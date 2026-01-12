@@ -1,16 +1,6 @@
 # http-server Specification
 
-## Purpose
-Defines the architectural requirements for the MCP Server runtime, which is implemented as a Spring Boot application supporting Stdio transport.
-## Requirements
-### Requirement: Spring Boot Container
-The application MUST run within a Spring Boot container to leverage Dependency Injection and standardized configuration.
-
-#### Scenario: Application Startup
-- **Given** the application JAR is executed
-- **When** the process starts
-- **Then** the Spring Context is initialized
-- **And** all defined beans (Tools, Services) are instantiated
+## ADDED Requirements
 
 ### Requirement: HTTP Transport
 The application MUST communicate via HTTP Server-Sent Events (SSE) to support standard MCP clients and remote connections.
@@ -27,3 +17,7 @@ The application MUST communicate via HTTP Server-Sent Events (SSE) to support st
 - **Then** the server accepts the request with `202 Accepted` or `200 OK`
 - **And** routes the message to the associated MCP server instance
 
+## REMOVED Requirements
+
+### Requirement: Stdio Transport
+The application MUST continue to communicate via Standard Input/Output (Stdio) to maintain compatibility with existing MCP clients.

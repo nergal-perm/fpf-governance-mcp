@@ -4,15 +4,13 @@
 The MCP Protocol specification defines how the FPF Governance server implements the Model Context Protocol. It covers the server's capabilities, tool exposure mechanism, and protocol compliance (JSON-RPC 2.0) needed to interoperate with MCP clients (like Claude Desktop or IDE extensions).
 ## Requirements
 ### Requirement: Initialize Handshake
-
-The server MUST parse the `initialize` JSON-RPC request using a type-safe model and respond with a valid structured result.
+The server MUST parse the `initialize` JSON-RPC request and respond with a valid structured result, ensuring the transport channel (HTTP/SSE) is correctly utilized.
 
 #### Scenario: Client sends valid initialize request
--   **Given** the server is running
--   **When** a valid JSON-RPC "initialize" request is received
--   **Then** the server deserializes it to a `JsonRpcRequest` object
--   **And** the server serializes a `JsonRpcResponse` with `result` containing server capabilities
--   **And** the `id` of the response matches the request `id`
+-   **Given** an established SSE connection
+-   **When** a client sends a valid JSON-RPC "initialize" request via HTTP POST
+-   **Then** the server sends a JSON-RPC response via the SSE stream
+-   **And** the response `result` contains the server capabilities
 
 ### Requirement: JSON-RPC Error Handling
 

@@ -47,6 +47,12 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Web Starter -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
         <!-- Java MCP SDK -->
         <dependency>
             <groupId>io.modelcontextprotocol.sdk</groupId>
