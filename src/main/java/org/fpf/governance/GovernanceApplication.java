@@ -17,15 +17,4 @@ public class GovernanceApplication {
         SpringApplication.run(GovernanceApplication.class, args);
     }
 
-    @Bean
-    public CommandLineRunner verifyNeo4jConnection(Driver driver) {
-        return args -> {
-            try {
-                driver.verifyConnectivity();
-                logger.info("✅ Neo4j Connection: SUCCESS (Bolt Protocol)");
-            } catch (Exception e) {
-                logger.error("❌ Neo4j Connection: FAILED", e);
-            }
-        };
-    }
 }

@@ -11,7 +11,7 @@ The First Principles Framework (FPF) is a rigorous self-management and thinking 
 
 - **The Brain (Logic Engine):** A custom AI framework (already existing) that applies formal logic/rigor to natural language inputs. It detects category errors, logical gaps, and validates hypotheses.
 - **The Interface (Hybrid):**
-    - **Web App:** The "Board Room." Used for high-level planning, logic deconstruction, and viewing the "Truth" (Knowledge Base).
+    - **Web App:** The "Board Room." Used for high-level planning, logic deconstruction, and viewing the "Truth" (Knowledge Base). Built with lightweight **HTMX** for dynamic partial updates.
     - **The FPF Governance MCP Server**: an HTTP-based server that provides tools to manage and govern a First Principles Framework (FPF) knowledge base. It exposes MCP resources and tools via an SSE (Server-Sent Events) transport to interact with the FPF specification and user data.
 - **The Single Source of Truth:** A **Read-Only Knowledge Base** (Text-based Dashboard for MVP). The user _cannot_ directly edit the plan or status. They must engage in a dialogue with the Agent to change the state of the system.
 
@@ -19,6 +19,7 @@ The First Principles Framework (FPF) is a rigorous self-management and thinking 
 - **Language**: Java 21
 - **Framework**: Spring Boot 3.2+
 - **Database**: Neo4j Community Edition (Graph Database)
+- **Frontend**: HTMX + Thymeleaf (Server-Side Rendering)
 - **Build System**: Maven (Wrapper)
 - **Runtime**: Java 21 LTS
 - **Distribution**: JAR / Container
