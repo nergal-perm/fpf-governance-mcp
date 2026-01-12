@@ -77,8 +77,13 @@ public class McpConfig {
     }
 
     @Bean
-    public McpJsonMapper mcpJsonMapper() {
-        return new JacksonMcpJsonMapper(new ObjectMapper());
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
+    }
+
+    @Bean
+    public McpJsonMapper mcpJsonMapper(ObjectMapper objectMapper) {
+        return new JacksonMcpJsonMapper(objectMapper);
     }
 
     @Bean

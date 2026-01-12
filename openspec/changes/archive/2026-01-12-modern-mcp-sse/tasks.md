@@ -1,0 +1,3 @@
+- [x] **Update McpController** to expose the single `/mcp/sse` endpoint.
+- [x] **Update Endpoint Event** to point to the new location.
+- [x] **Add Mcp-Session-Id header** to the handshake response.
