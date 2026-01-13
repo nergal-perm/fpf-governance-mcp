@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>FPF: Frame & Deconstruct</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/webjars/htmx.org/1.9.10/dist/htmx.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script> 
+</head>
+<body class="bg-gray-100 h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-white shadow p-4 flex justify-between items-center z-10">
+        <h1 class="text-2xl font-bold text-gray-800">Activity 1: Frame & Deconstruct</h1>
+        <a href="/" class="text-blue-500 hover:text-blue-700">Back to Dashboard</a>
+    </header>
+
+    <!-- Main Content: 2 Columns -->
+    <div class="flex-grow flex overflow-hidden">
+        
+        <!-- Left Column: User Input (1/3) -->
+        <div class="w-1/3 bg-white border-r border-gray-200 p-6 overflow-y-auto flex flex-col">
+            <h2 class="text-lg font-semibold mb-4 text-gray-700">The Situation</h2>
+            <p class="text-sm text-gray-500 mb-4">
+                Describe your idea or problem in detail. Don't worry about structure yet—just get it out.
+            </p>
+            
+            <form hx-post="/activity/frame/submit" 
+                  hx-target="#response-pane" 
+                  hx-indicator="#loading-indicator"
+                  class="flex-grow flex flex-col">
+                
+                <textarea name="description" 
+                          class="flex-grow w-full p-4 border rounded-lg focus:ring-2 focus:ring-blue-500 mb-4 resize-none"
+                          placeholder="I want to build... / I am stuck on..."></textarea>
+                
+                <div class="flex items-center justify-between">
+                    <button type="submit" 
+                            class="px-6 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 transition w-full">
+                        Deconstruct
+                    </button>
+                </div>
+            </form>
+             <div id="loading-indicator" class="htmx-indicator mt-2 text-center text-blue-500">
+                Thinking...
+            </div>
+        </div>
+
+        <!-- Right Column: Brain Response (2/3) -->
+        <div class="w-2/3 bg-gray-50 p-8 overflow-y-auto">
+            <h2 class="text-lg font-semibold mb-4 text-gray-700">Deconstruction</h2>
+            
+            <div id="response-pane" class="bg-white p-6 rounded shadow min-h-[50%]">
+                <p class="text-gray-400 italic">The Agent's analysis will appear here...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fragments for HTMX -->
+    <!-- These are templates used by the controller, they should not be rendered in the initial page -->
+    <div th:remove="all">
+        <div th:fragment="response-fragment">
+            <div th:if="${response != null}">
+                <!-- Reframed Problem -->
+                <div class="mb-8">
+                    <h3 class="text-md font-bold text-gray-800 mb-2 uppercase tracking-tight">Reframed Problem</h3>
+                    <p class="text-gray-700 leading-relaxed bg-blue-50 p-4 rounded-md border-l-4 border-blue-400" th:text="${response.reframedProblem}"></p>
+                </div>
+
+                <!-- Holons Table -->
+                <div class="mb-8">
+                    <h3 class="text-md font-bold text-gray-800 mb-2 uppercase tracking-tight">Holonic Hierarchy</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200 text-sm">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th class="px-4 py-2 text-left font-semibold text-gray-600">ID</th>
+                                    <th class="px-4 py-2 text-left font-semibold text-gray-600">Name</th>
+                                    <th class="px-4 py-2 text-left font-semibold text-gray-600">Type</th>
+                                    <th class="px-4 py-2 text-left font-semibold text-gray-600">Role</th>
+                                    <th class="px-4 py-2 text-left font-semibold text-gray-600">Manifestation</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr th:each="holon : ${response.holons}">
+                                    <td class="px-4 py-2 font-mono text-xs" th:text="${holon.id}"></td>
+                                    <td class="px-4 py-2 font-bold" th:text="${holon.name}"></td>
+                                    <td class="px-4 py-2">
+                                        <span th:text="${holon.type}" 
+                                              th:class="${holon.type == 'System' ? 'bg-green-100 text-green-800 px-2 py-0.5 rounded text-xs' : 
+                                                        (holon.type == 'Episteme' ? 'bg-purple-100 text-purple-800 px-2 py-0.5 rounded text-xs' : 'bg-red-100 text-red-800 px-2 py-0.5 rounded text-xs')}">
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-2 italic text-gray-600" th:text="${holon.role}"></td>
+                                    <td class="px-4 py-2 text-gray-500" th:text="${holon.manifestation}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Category Errors (Error Callouts) -->
+                <div th:if="${not #lists.isEmpty(response.categoryErrors)}" class="mb-8">
+                    <h3 class="text-md font-bold text-gray-800 mb-2 uppercase tracking-tight">Ontological Audit (Category Errors)</h3>
+                    <div th:each="error : ${response.categoryErrors}" class="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
+                        <p class="font-bold text-red-800" th:text="${error.description}"></p>
+                        <p class="text-sm text-red-700 mt-1"><span class="font-semibold text-red-900">Violation:</span> [[${error.violation}]]</p>
+                        <p class="text-sm text-green-700 mt-1 italic"><span class="font-semibold text-green-900">Correction:</span> [[${error.correction}]]</p>
+                    </div>
+                </div>
+
+                <!-- Ghost Reinstantiations (Warning Callouts) -->
+                <div th:if="${not #lists.isEmpty(response.ghostReinstantiations)}" class="mb-8">
+                    <h3 class="text-md font-bold text-gray-800 mb-2 uppercase tracking-tight">Ghost Reinstantiations</h3>
+                    <div th:each="ghost : ${response.ghostReinstantiations}" class="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-2 flex items-center justify-between">
+                        <div>
+                            <span class="text-gray-500 line-through mr-2" th:text="${ghost.from}"></span>
+                            <span class="text-gray-400 mr-2">&rarr;</span>
+                            <span class="font-bold text-yellow-800" th:text="${ghost.to}"></span>
+                        </div>
+                        <span class="text-xs font-bold uppercase text-yellow-600 bg-yellow-100 px-2 py-1 rounded">Re-instantiated</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:fragment="error-fragment">
+            <div class="bg-red-50 border-l-4 border-red-500 p-4">
+                <h3 class="text-red-800 font-bold">Error</h3>
+                <p class="text-red-700" th:text="${error}"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script to Render Markdown after HTMX swap (No longer needed for structured data, but keeping for reference or future use) -->
+    <script>
+        document.body.addEventListener('htmx:afterSwap', function(evt) {
+            // Logic for post-swap rendering if needed
+        });
+    </script>
+</body>
+</html>

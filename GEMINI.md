@@ -53,7 +53,7 @@ This project uses **OpenSpec** for specification-driven development. AI agents m
     7.  **Validate:** `openspec validate <change-id> --strict`.
 
 **2. Implementing Changes**
-*   **Wait for Approval:** Do not start coding until the proposal is approved.
+*   **Wait for Approval:** Do NOT start coding until the proposal is approved. This requires an explicit `openspec:apply` command from the user.
 *   **Execute:** Follow `tasks.md` sequentially.
 *   **Update:** Mark tasks as `[x]` in `tasks.md` as you complete them.
 
@@ -71,6 +71,9 @@ This project uses **OpenSpec** for specification-driven development. AI agents m
 *   **Testing:** JUnit 5.
 *   **"Read-Only" Rule:** Database entities are immutable via direct user CRUD. State changes only via Agent validation.
 *   **"Socratic" Persona:** The Agent must be professional, logical, and firm.
+
+### Git Rules
+*   **Explicit Commits Only:** Never attempt adding files or committing changes via `git` without an explicit user command to do so.
 
 ## Key Directories
 *   `openspec/`: Specifications and change proposals.

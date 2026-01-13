@@ -24,7 +24,16 @@
         </div>
 
         <div class="mb-4 pt-4 border-t">
-            <h2 class="text-xl font-semibold mb-2">Brain Connectivity Test</h2>
+            <h2 class="text-xl font-semibold mb-4 text-gray-800">Available Activities</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <a href="/activity/frame" class="block p-4 border rounded-lg hover:bg-blue-50 transition border-blue-200">
+                    <h3 class="font-bold text-blue-800">1. Frame & Deconstruct</h3>
+                    <p class="text-sm text-gray-600">Break down your idea into a holonic hierarchy using FPF principles.</p>
+                </a>
+            </div>
+        </div>
+
+        <div class="mb-4 pt-4 border-t">
             <form hx-post="/test-brain" hx-target="#brain-response" hx-indicator="#loading-indicator">
                 <div class="flex flex-col space-y-2">
                     <label for="brain-prompt" class="font-medium text-gray-700">Enter a prompt:</label>
